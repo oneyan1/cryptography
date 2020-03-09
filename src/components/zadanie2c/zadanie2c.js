@@ -30,11 +30,10 @@ export default class Zadanie2c extends React.Component{
         let regExp = / /gi;
         let newInput= input.replace(regExp , "");
 
-        let sublineLength = [];
-        sublineLength = this._sublineLengthString(index, newInput.length); // tablica dlugosci werszy
-
+        let sublineLength = this._sublineLengthString(index, newInput.length); // tablica dlugosci werszy
+        
         for(let i = 0; i<index.length; i++){
-            let actualIndex =0;
+            let actualIndex = 0;
             for(let j = 0; j< index.length;j++){
                 if(index[j] === i+1){
                     actualIndex = j;
@@ -42,59 +41,52 @@ export default class Zadanie2c extends React.Component{
                 }
             }
             let tmp = actualIndex;
-            for(let k = 0; k< sublineLength.length; k++){
+            for(let k = 0; k < sublineLength.length; k++){
                 //console.log(actualIndex+1);
                 if(tmp >= newInput.length) break;
-                if(actualIndex+1 <= sublineLength[tmp]){
+                if(actualIndex+1 <= sublineLength[k]){
                     output += newInput[tmp];
-                    console.log(output);
+                    //console.log(output);
                 }
                 tmp += sublineLength[k];
                 //console.log(tmp);
             }
         }
+        return output;
 
     };
 
     decrypt = ()=>{
         const {input, key} = this.state;
+        let outputArr = [];
         let output = "";
-        let index = [];
-        index = this._indexOnStringBuilder(key);
+        let index = this._indexOnStringBuilder(key);
         let regExp = / /gi;
-        let newInput= input.replace(regExp , "");
-        let columnArray = [];
-        let startIndex = 0;
-        let actualIndex = 0;
-        let columnLength;
+        let newInput = input.replace(regExp , "");
+        let sublineLength = this._sublineLengthString(index, newInput.length);
+        let nextSymbol = 0;
 
-        for(let i = 0; i<key.length; i++){
-            for(let j = 0; j<key.length;j++){  //tablica kolumn pod numerami indexow od klucza
+        for(let i = 0; i < index.length; i++){
+            let actualIndex = 0;
+            for(let j = 0; j<index.length; j++){
                 if(index[j] === i+1){
                     actualIndex = j;
                     break;
                 }
             }
-
-            columnLength = Math.floor(newInput.length/key.length);  //razbicie szyfru na czesci
-            if(actualIndex<newInput.length % key.length){
-                columnLength++;
-            }
-
-            let sliseString = newInput.slice(startIndex, startIndex+columnLength);
-            columnArray[actualIndex] = sliseString;
-            startIndex = Math.floor(startIndex + columnLength);
-        }
-
-
-        for(let i = 0; i<(newInput.length / key.length)+1; i++){
-            for(let j = 0; j<key.length;j++){
-                if(columnArray[j][i] !== undefined) {
-                    output = output + columnArray[j][i];
+            let tmp = actualIndex;
+            for(let k = 0; k<sublineLength.length; k++){
+                if(tmp >= newInput.length) break;
+                if(actualIndex+1 <= sublineLength[k]){
+                    outputArr[tmp] = newInput[nextSymbol];
+                    nextSymbol++;
                 }
+                tmp+=sublineLength[k];
             }
         }
-
+        for(let i = 0; i<outputArr.length; i++){
+            output+=outputArr[i];
+        }
         this.setState({
             output
         });
@@ -160,7 +152,6 @@ export default class Zadanie2c extends React.Component{
                     <input type="button" value="Zaszyfruj" type="submit" className="btn btn-primary"/>
                     <input type="button" value="Odszyfruj" onClick={this.decrypt} className="btn btn-info"/>
                 </div>
-
             </form>
         )
     }

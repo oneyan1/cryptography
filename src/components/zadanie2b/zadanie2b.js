@@ -25,8 +25,7 @@ export default class Zadanie2b extends React.Component{
     encrypt = ()=>{
         const {input, key} = this.state;
         let output = "";
-        let index = [];
-        index = this._indexOnStringBuilder(key);
+        let index = this._indexOnStringBuilder(key);
         let regExp = / /gi;
         let newInput= input.replace(regExp , "");
 
@@ -44,15 +43,14 @@ export default class Zadanie2b extends React.Component{
                 actualIndex +=key.length;
             }
         }
-        console.log(output);
+        
         return output;
     };
 
     decrypt = ()=>{
         const {input, key} = this.state;
         let output = "";
-        let index = [];
-        index = this._indexOnStringBuilder(key);
+        let index = this._indexOnStringBuilder(key);
         let regExp = / /gi;
         let newInput= input.replace(regExp , "");
         let columnArray = [];
